@@ -38,6 +38,7 @@
         color: #a9b7c6;
         padding: 3px;
         border-radius: 4px;
+        white-space: pre-wrap;
     }
 
 </style>
@@ -60,20 +61,27 @@
     function convert(text) {
         let output = ""
         let currentlyInEmote = false
-        for (const char of text) {
-            if (char === ':')
-                currentlyInEmote = !currentlyInEmote
+        for (let char of text) {
+            switch (char) {
+                case ':':
+                    currentlyInEmote = !currentlyInEmote
+                    break;
+                case ' ':
+                    char = '    '
+                    break;
+
+            }
 
             const alpha = /[a-zA-Z0-9]/.test(char)
 
-            output += !currentlyInEmote && alpha ? `:dyescape_${char}:` : char;
+            output += !currentlyInEmote && alpha ? `:dyescape_${char.toLowerCase()}:` : char;
         }
 
         return output
     }
 
     input.oninput = (e) => {
-        output.innerText = convert(e.target.value);
+        output.value = convert(e.target.value);
     }
 </script>
 </body>
